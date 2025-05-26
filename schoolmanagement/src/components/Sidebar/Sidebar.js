@@ -32,11 +32,11 @@ const Sidebar = ({ collapsed, toggleSidebar }) => {
           </li>
           <li>
             <NavLink
-              to="/students"
+              to="/users"
               className={({ isActive }) => isActive ? 'sidebar-link active' : 'sidebar-link'}
               onClick={handleLinkClick}
             >
-              <span>👩‍🎓</span> {!collapsed && 'Students'}
+              <span>👩‍🎓</span> {!collapsed && 'Users'}
             </NavLink>
           </li>
           <li>
