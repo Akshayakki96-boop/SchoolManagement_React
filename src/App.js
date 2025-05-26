@@ -12,6 +12,8 @@ import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
 
 import Dashboard from './pages/Dashboard';
+import Users from './components/Users/Users'; 
+import AddUser from './components/Users/AddUser';
 // import Students from './pages/Students';
 // import Teachers from './pages/Teachers';
 // import Settings from './pages/Settings';
@@ -58,6 +60,8 @@ class Layout extends Component {
           <Routes>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/users/add-user" element={<AddUser />} />
             {/* other routes */}
           </Routes>
         </div>
