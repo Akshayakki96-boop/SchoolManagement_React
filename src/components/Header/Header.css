@@ -27,5 +27,20 @@
   justify-content: center;
   cursor: pointer;
 }
-  
+
+.menu-btn-header {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 15px;
+  display: none; /* hidden by default, shown on mobile */
+}
+
+@media (max-width: 768px) {
+   .menu-btn-header {
+    display: block;
+  }
+}
   
