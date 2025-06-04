@@ -14,6 +14,8 @@ import Dashboard from './pages/Dashboard';
 import Users from './components/Users/Users';
 import AddUser from './components/Users/AddUser';
 import LoginForm from './components/Login/LoginForm';
+import Students from './components/Students/Students';
+import AddStudent from './components/Students/AddStudent';
 
 // HOC to inject location
 const withLocation = (Component) => {
@@ -86,6 +88,8 @@ class Layout extends Component {
               <Route path="/users" element={<Users />} />
               <Route path="/users/add-user" element={<AddUser />} />
               <Route path="/login" element={<LoginForm />} />
+              <Route path="/students" element={<Students />} />
+              <Route path="/students/add-student" element={<AddStudent />} />
             </Routes>
           </div>
         </div>
