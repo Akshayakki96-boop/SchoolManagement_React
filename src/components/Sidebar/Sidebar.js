@@ -30,12 +30,12 @@ const Sidebar = ({ collapsed, toggleSidebar, isMobileOpen }) => {
             </li>
             <li>
               <NavLink to="/users" className={({ isActive }) => isActive ? 'sidebar-link active' : 'sidebar-link'} onClick={handleLinkClick}>
-                <span>👩‍🎓</span> {!collapsed && 'Users'}
+                <span>👨‍🏫</span> {!collapsed && 'Users'}
               </NavLink>
             </li>
             <li>
-              <NavLink to="/teachers" className={({ isActive }) => isActive ? 'sidebar-link active' : 'sidebar-link'} onClick={handleLinkClick}>
-                <span>👨‍🏫</span> {!collapsed && 'Teachers'}
+              <NavLink to="/students" className={({ isActive }) => isActive ? 'sidebar-link active' : 'sidebar-link'} onClick={handleLinkClick}>
+                <span>👩‍🎓</span> {!collapsed && 'Students'}
               </NavLink>
             </li>
             <li>
