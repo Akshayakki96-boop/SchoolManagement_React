@@ -22,7 +22,8 @@ class AddStudent extends Component {
   photo: null,
   birthCert: null,
   medical: '',
-  contactMethod: ''
+  contactMethod: '',
+  category: '', // New field for category
 };
 
   }
@@ -64,16 +65,20 @@ class AddStudent extends Component {
       />
     </div>
 
-    <div className="form-group">
-      <label>Email</label>
-      <input
-        type="email"
-        name="email"
-        value={this.state.email}
+ <div className="form-group">
+      <label>Category</label>
+      <select
+        name="category"
+        value={this.state.category}
         onChange={this.handleInputChange}
-        placeholder="Enter email"
         required
-      />
+      >
+        <option value="">Select category</option>
+        <option value="1">Gen</option>
+        <option value="2">OBC</option>
+        <option value="3">ST/SC</option>
+        <option value="4">Others</option>
+      </select>
     </div>
   </div>
 
@@ -119,6 +124,8 @@ class AddStudent extends Component {
         <option value="other">Other</option>
       </select>
     </div>
+
+    
 
     <div className="form-group">
       <label>Class</label>
