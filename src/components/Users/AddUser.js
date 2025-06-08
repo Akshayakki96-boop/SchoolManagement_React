@@ -1,17 +1,34 @@
 import React, { Component } from 'react';
 import './AddUser.css';
+import Swal from "sweetalert2";
+import { Alert, Button } from 'react-bootstrap';
+import axios from 'axios';
+import withNavigation from '../../withNavigation'; 
 
 class AddUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      username: '',
       email: '',
       phone: '',
-      selectedClass: '',
-      gender: ''
+      role: '',
+      password: '',
+      confirmPassword: '',
     };
   }
+    validateForm = () => {
+    const { username, email, phone, role, password, confirmPassword } = this.state;
+    return (
+      username.trim() !== '' &&
+      email.trim() !== '' &&
+      phone.trim() !== '' &&
+      role !== '' &&
+      password.trim() !== '' &&
+      confirmPassword.trim() !== ''
+      && password === confirmPassword // Ensure passwords match
+    );
+  };
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,33 +37,74 @@ class AddUser extends Component {
     });
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(this.state);
-    // Submit logic here
+  handleSubmit = () => {
+    const { username, email, role, password,confirmPassword} = this.state;
+    this.setState({ keepSpinner: true });
+    const baseUrl = process.env.REACT_APP_BASEURL;
+    const Url = `${baseUrl}/api/Signup/Signup`;
+    const userData = {
+      "username": username,
+      "email": email,
+      "user_role": role,
+      "password": btoa(password), // Encoding password
+      "confirmPassword": btoa(confirmPassword) // Encoding confirm password
+    };
+
+    axios.post(Url, userData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        this.setState({ keepSpinner: false });
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'User added successfully',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          this.props.navigate('/users');
+        });
+
+      })
+      .catch((error) => {
+        console.error('Signup Error:', error.response?.data || error.message);
+        this.setState({ keepSpinner: false });
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: 'Something went wrong. Please try again ore re-login',
+        });
+      });
   };
 
   render() {
+  const validateForm = this.validateForm();
     return (
       <div className="full-page-form">
+    
         <div className="form-wrapper">
+              {this.state.keepSpinner && <div className="custom-loader">
+          <div className="loader-spinner"></div>
+          <p className="loader-text">Please Wait...</p>
+        </div>}
           <h1 className="form-title">Add User</h1>
           
           <form onSubmit={this.handleSubmit} className="user-form">
             <div className="form-row">
               <div className="form-group">
-                <label>Name</label>
+                <label>UserName*</label>
                 <input
                   type="text"
-                  name="name"
-                  value={this.state.name}
+                  name="username"
+                  value={this.state.username}
                   onChange={this.handleInputChange}
-                  placeholder="Enter name"
+                  placeholder="Enter username"
                 />
               </div>
 
               <div className="form-group">
-                <label>Email</label>
+                <label>Email*</label>
                 <input
                   type="email"
                   name="email"
@@ -59,7 +117,7 @@ class AddUser extends Component {
 
             <div className="form-row">
               <div className="form-group">
-                <label>Phone</label>
+                <label>Phone*</label>
                 <input
                   type="tel"
                   name="phone"
@@ -70,38 +128,50 @@ class AddUser extends Component {
               </div>
 
               <div className="form-group">
-                <label>Class</label>
+                <label>Role*</label>
                 <select
-                  name="selectedClass"
-                  value={this.state.selectedClass}
+                  name="role"
+                  value={this.state.role}
                   onChange={this.handleInputChange}
                 >
-                  <option value="">Select class</option>
-                  <option value="1">Class 1</option>
-                  <option value="2">Class 2</option>
-                  <option value="3">Class 3</option>
+                  <option value="">Select role</option>
+                  <option value="1">Admin</option>
+                  <option value="2">Staff</option>
                 </select>
               </div>
             </div>
-
             <div className="form-row">
               <div className="form-group">
-                <label>Gender</label>
-                <select
-                  name="gender"
-                  value={this.state.gender}
+                <label>Password*</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={this.state.password}
                   onChange={this.handleInputChange}
-                >
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
+                  placeholder="Enter password"
+                />
               </div>
+
+              <div className="form-group">
+                <label>Confirm Password*</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={this.state.confirmPassword}
+                  onChange={this.handleInputChange}
+                  placeholder="Confirm password"
+                />
+                {this.state.confirmPassword && this.state.password !== this.state.confirmPassword && (
+                  <div style={{ color: 'red', fontSize: '0.9em', marginTop: '4px' }}>
+                    Passwords do not match
+                  </div>
+                )}
+              </div>
+
             </div>
 
             <div className="form-actions">
-              <button type="submit" className="submit-btn">
+              <button type="button" className="submit-btn" disabled={!validateForm} onClick={this.handleSubmit}>
                 Submit
               </button>
             </div>
@@ -112,4 +182,4 @@ class AddUser extends Component {
   }
 }
 
-export default AddUser;
+export default withNavigation(AddUser);
