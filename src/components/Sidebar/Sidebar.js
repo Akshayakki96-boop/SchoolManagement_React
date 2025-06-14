@@ -9,6 +9,16 @@ const Sidebar = ({ collapsed, toggleSidebar, isMobileOpen }) => {
     }
   };
 
+  const handleClick = () => {
+    // Clear any stored auth tokens or user info
+    localStorage.removeItem('authToken');
+    // Optionally, redirect to login or home
+    window.location.href = '/login'; // or use navigate('/login') if using `react-router-dom` hook
+  
+    // Optionally, log or perform analytics
+    console.log('User logged out');
+  };
+
   return (
     <>
       {/* Overlay for mobile */}
@@ -39,8 +49,8 @@ const Sidebar = ({ collapsed, toggleSidebar, isMobileOpen }) => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/settings" className={({ isActive }) => isActive ? 'sidebar-link active' : 'sidebar-link'} onClick={handleLinkClick}>
-                <span>⚙️</span> {!collapsed && 'Settings'}
+              <NavLink onClick={handleClick} >
+                <span>⚙️</span> {!collapsed && 'Logout'}
               </NavLink>
             </li>
           </ul>
