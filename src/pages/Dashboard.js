@@ -2,6 +2,8 @@ import React, { Component, createRef } from 'react';
 import Chart from 'chart.js/auto';
 import './Dashboard.css';
 import axios from 'axios';
+import withNavigation from '../withNavigation';
+import Swal from "sweetalert2";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -52,7 +54,6 @@ class Dashboard extends Component {
     this.getUserData();
   }
   getUserData = () => {
-    debugger;
         const baseUrl = process.env.REACT_APP_BASEURL;
         const Url = `${baseUrl}/api/Student/Dashboard`;
     
@@ -64,11 +65,25 @@ class Dashboard extends Component {
         })
           .then((response) => {
             console.log('Dashboard Data:', response.data);
+            this.setState({ userName: response.data.data.username || 'User' });
             // Process and update charts with the response data if needed  
     
           })
           .catch((error) => {
-
+            console.error('Error fetching dashboard data:', error.response?.data || error.message);
+            if(error.response && error.response.status === 401) {
+              // Handle unauthorized access, e.g., redirect to login
+              this.props.navigate('/login');
+            }
+            else
+            {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message || 'An error occurred while fetching dashboard data.',
+              });
+            }
+            // Handle error appropriately, e.g., show an alert or log the error
           });
   }
 
@@ -85,10 +100,15 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="dashboard-content">
+       <section className="cards">
+          <div className="card">
+            <h3 style={{textAlign:'left'}}>Welcome,  {this.state.userName}</h3>
+          </div>
+        </section>
         <section className="cards">
           <div className="card">
-            <h3>Welcome,</h3>
-            <p>{this.state.userName}</p>
+            <h3>Students</h3>
+            <p>113</p>
           </div>
           <div className="card">
             <h3>Teachers</h3>
@@ -111,4 +131,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default withNavigation(Dashboard);

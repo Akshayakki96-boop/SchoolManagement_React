@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import './AddUser.css';
 import Swal from "sweetalert2";
-import { Alert, Button } from 'react-bootstrap';
 import axios from 'axios';
-import withNavigation from '../../withNavigation'; 
+import withNavigation from '../../withNavigation';
 
 class AddUser extends Component {
   constructor(props) {
@@ -11,18 +10,16 @@ class AddUser extends Component {
     this.state = {
       username: '',
       email: '',
-      phone: '',
       role: '',
       password: '',
       confirmPassword: '',
     };
   }
-    validateForm = () => {
-    const { username, email, phone, role, password, confirmPassword } = this.state;
+  validateForm = () => {
+    const { username, email, role, password, confirmPassword } = this.state;
     return (
       username.trim() !== '' &&
       email.trim() !== '' &&
-      phone.trim() !== '' &&
       role !== '' &&
       password.trim() !== '' &&
       confirmPassword.trim() !== ''
@@ -38,7 +35,7 @@ class AddUser extends Component {
   };
 
   handleSubmit = () => {
-    const { username, email, role, password,confirmPassword} = this.state;
+    const { username, email, role, password, confirmPassword } = this.state;
     this.setState({ keepSpinner: true });
     const baseUrl = process.env.REACT_APP_BASEURL;
     const Url = `${baseUrl}/api/Signup/Signup`;
@@ -70,26 +67,33 @@ class AddUser extends Component {
       .catch((error) => {
         console.error('Signup Error:', error.response?.data || error.message);
         this.setState({ keepSpinner: false });
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed',
-          text: 'Something went wrong. Please try again ore re-login',
-        });
+        if (error.response && error.response.status === 401) {
+          // Handle unauthorized access, e.g., redirect to login
+          this.props.navigate('/login');
+        }
+        else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'Something went wrong !',
+          });
+        }
+        // Handle error appropriately, e.g., show an alert or log the error
       });
   };
 
   render() {
-  const validateForm = this.validateForm();
+    const validateForm = this.validateForm();
     return (
       <div className="full-page-form">
-    
+
         <div className="form-wrapper">
-              {this.state.keepSpinner && <div className="custom-loader">
-          <div className="loader-spinner"></div>
-          <p className="loader-text">Please Wait...</p>
-        </div>}
+          {this.state.keepSpinner && <div className="custom-loader">
+            <div className="loader-spinner"></div>
+            <p className="loader-text">Please Wait...</p>
+          </div>}
           <h1 className="form-title">Add User</h1>
-          
+
           <form onSubmit={this.handleSubmit} className="user-form">
             <div className="form-row">
               <div className="form-group">
@@ -117,17 +121,6 @@ class AddUser extends Component {
 
             <div className="form-row">
               <div className="form-group">
-                <label>Phone*</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={this.state.phone}
-                  onChange={this.handleInputChange}
-                  placeholder="Enter phone number"
-                />
-              </div>
-
-              <div className="form-group">
                 <label>Role*</label>
                 <select
                   name="role"
@@ -139,8 +132,6 @@ class AddUser extends Component {
                   <option value="2">Staff</option>
                 </select>
               </div>
-            </div>
-            <div className="form-row">
               <div className="form-group">
                 <label>Password*</label>
                 <input
@@ -151,6 +142,9 @@ class AddUser extends Component {
                   placeholder="Enter password"
                 />
               </div>
+            </div>
+            <div className="form-row">
+
 
               <div className="form-group">
                 <label>Confirm Password*</label>
