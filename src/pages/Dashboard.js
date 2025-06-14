@@ -1,10 +1,14 @@
 import React, { Component, createRef } from 'react';
 import Chart from 'chart.js/auto';
 import './Dashboard.css';
+import axios from 'axios';
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      userName: '',
+    };
     this.lineChartRef = createRef();
     this.donutChartRef = createRef();
     this.lineChart = null;
@@ -45,6 +49,27 @@ class Dashboard extends Component {
       },
       options: { responsive: true, cutout: '60%' },
     });
+    this.getUserData();
+  }
+  getUserData = () => {
+    debugger;
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const Url = `${baseUrl}/api/Student/Dashboard`;
+    
+        axios.post(Url, "", {
+          headers: {
+            'Content-Type': 'application/json',
+             Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          },
+        })
+          .then((response) => {
+            console.log('Dashboard Data:', response.data);
+            // Process and update charts with the response data if needed  
+    
+          })
+          .catch((error) => {
+
+          });
   }
 
   componentWillUnmount() {
@@ -62,8 +87,8 @@ class Dashboard extends Component {
       <div className="dashboard-content">
         <section className="cards">
           <div className="card">
-            <h3>Students</h3>
-            <p>1,320</p>
+            <h3>Welcome,</h3>
+            <p>{this.state.userName}</p>
           </div>
           <div className="card">
             <h3>Teachers</h3>

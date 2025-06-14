@@ -16,6 +16,7 @@ import AddUser from './components/Users/AddUser';
 import LoginForm from './components/Login/LoginForm';
 import Students from './components/Students/Students';
 import AddStudent from './components/Students/AddStudent';
+import ResetPassword from './components/ResetPassword/ResetPassword';
 
 // HOC to inject location
 const withLocation = (Component) => {
@@ -51,15 +52,18 @@ class Layout extends Component {
   render() {
     const { location } = this.props;
     const { isCollapsed, isMobileOpen } = this.state;
-    const isLoginPage = location.pathname.toLowerCase() === '/login';
+    const path = location.pathname.toLowerCase();
+    const isAuthPage = path === '/login' || path === '/reset-password';
 
-    if (isLoginPage) {
+    if (isAuthPage) {
       return (
         <div className="app-container">
           <Header />
           <div className="main-content" style={{ flex: 1, padding: '20px' }}>
             <Routes>
               <Route path="/login" element={<LoginForm />} />
+               <Route path="/reset-password" element={<ResetPassword />} />
+
             </Routes>
           </div>
         </div>
@@ -90,6 +94,8 @@ class Layout extends Component {
               <Route path="/login" element={<LoginForm />} />
               <Route path="/students" element={<Students />} />
               <Route path="/students/add-student" element={<AddStudent />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+
             </Routes>
           </div>
         </div>

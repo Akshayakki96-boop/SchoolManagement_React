@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import './Login.css';
+import './ResetPassword.css';
 import loginImage from '../../assets/teacher-board.jpg'; // Replace with correct path to image
 import logo from '../../assets/Kubra-Logo.svg'; // Replace with correct path to logo
 import axios from 'axios';
 import withNavigation from '../../withNavigation'; // Assuming you have a HOC for navigation
 import Swal from "sweetalert2";
 
-class LoginForm extends Component {
+class ResetPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,7 +74,7 @@ class LoginForm extends Component {
            
           <div className="login-box">
             <img src={logo} alt="Logo" className="login-logo" />
-            <h2>Admin Login</h2>
+            <h2>Reset Password</h2>
             <div className="input-group">
               <div className="input-wrapper">
                 <input type="text" placeholder="Username" name="username" onChange={this.handleInputChange} />
@@ -87,8 +87,7 @@ class LoginForm extends Component {
                 <span className="input-icon">🔒</span>
               </div>
             </div>
-            <button type="button" className="signin-btn" disabled={!validateForm} onClick={this.handleSubmit} >Sign In</button>
-            <a href="/reset-password" className="forgot-password">🔑 Forgot Password?</a>
+            <button type="button" className="signin-btn" disabled={!validateForm} onClick={this.handleSubmit} >Submit</button>
           </div>
         </div>
         <div className="login-right">
@@ -99,4 +98,4 @@ class LoginForm extends Component {
   }
 }
 
-export default withNavigation(LoginForm);
+export default withNavigation(ResetPassword);
